@@ -64,7 +64,7 @@
       exit;
   }
 
-// insert or delete entry on table users_events
+// insert or delete participant
 if($_POST['req_type'] === "setParticipant") {
     require_once('../conf/path.php');
     require_once(PROJECT_ROOT . 'helper/dbconnect.php');
@@ -82,8 +82,9 @@ if($_POST['req_type'] === "setParticipant") {
       $result = $db->insertNewParticipant($_SESSION['user'], $id);
 
       echo($result);
-      exit;
+
     }
+    exit;
 }
 
 ?>

@@ -11,6 +11,7 @@
 * [PHPMailer](https://github.com/PHPMailer/PHPMailer)
 * [startbootstrap-freelancer](https://github.com/BlackrockDigital/startbootstrap-freelancer)
 * [Magnific Popup](http://dimsemenov.com/plugins/magnific-popup/)
+* [datetimepicker](https://github.com/xdan/datetimepicker)
 
 ## Usage
 

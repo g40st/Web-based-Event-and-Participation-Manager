@@ -4,7 +4,7 @@ $(document).ready(function() {
 
         fixedWeekCount: false,
         weekNumbers: true,
-        events: "helper/events.php?view=1",
+        events: "ajax/events.inc.php?view=1",
         displayEventEnd: true,
         aspectRatio: 2.5,
         defaultView: 'week',
@@ -14,7 +14,6 @@ $(document).ready(function() {
                   duration: { weeks: 3}
               }
           },
-
 
         dayClick: function(date, jsEvent, view) {
           callbackClick(date, jsEvent, view, $(this));
@@ -28,10 +27,15 @@ $(document).ready(function() {
 
       });
 
+      // query the actual day
       date = new Date();
       var tmpElement = $('td').find("td.fc-today");
       id = tmpElement.attr('id');
       callbackClick(moment(date), null, null, $('#' + id));
+
+      // init the datetimepickers for event creation
+      jQuery('#startDatepicker').datetimepicker();
+      jQuery('#endDatepicker').datetimepicker();
 });
 
 
@@ -41,10 +45,9 @@ function callbackClick(date, jsEvent, view, element) {
     date.hour(0);
     console.log('Clicked on: ' + date.format());
 
-
     $.ajax({
         type: "POST",
-        url:  "helper/events.php",
+        url:  "ajax/events.inc.php",
         contentType: "application/x-www-form-urlencoded;charset=utf-8",
         data: "req_type=getDay&day="+date.format(),
         success: function(json) {
@@ -78,7 +81,7 @@ function callbackClick(date, jsEvent, view, element) {
                   tmpButton = $(this)
                   $.ajax({
                       type: "POST",
-                      url:  "helper/events.php",
+                      url:  "ajax/events.inc.php",
                       contentType: "application/x-www-form-urlencoded;charset=utf-8",
                       data: "req_type=setParticipant&event_id="+event.target.id+"&type="+$(this).text(),
                       success: function(data) {

@@ -301,6 +301,27 @@ class Db {
     }
 
     /**
+     * create a new event in events table
+     *
+     *
+     * @return return true if success
+     */
+    public function insertNewEvent($title, $amountP, $start, $end, $description) {
+        $connection = $this->connect();
+
+        $stmt = $connection->prepare("INSERT INTO events (id, title, start, end, participants, description) VALUES (NULL, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssis", $title, $start, $end, $amountP, $description);
+        if($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            $stmt->close();
+            return false;
+        }
+        printf("Error: %s.\n", $stmt->error);
+    }
+
+    /**
      * insert entry to users_events
      *
      *

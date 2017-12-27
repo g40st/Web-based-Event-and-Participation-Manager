@@ -32,6 +32,7 @@
     <link href="assets/vendor/fullcalendar/css/fullcalendar.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="assets/vendor/datetimepicker/css/jquery.datetimepicker.css" rel="stylesheet" type="text/css">
     <link href="assets/css/style.css" rel="stylesheet" type="text/css">
     <!-- Plugin CSS -->
     <link href="assets/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
@@ -43,6 +44,7 @@
     <!-- Bootstrap core JavaScript -->
     <script src="assets/vendor/jquery/jquery.min.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src='assets/vendor/datetimepicker/js/jquery.datetimepicker.full.min.js'></script>
     <script src="assets/vendor/fullcalendar/js/moment.min.js"></script>
     <script src="assets/vendor/jquery/jquery-ui.min.js"></script>
     <script src="assets/vendor/fullcalendar/js/fullcalendar.min.js"></script>

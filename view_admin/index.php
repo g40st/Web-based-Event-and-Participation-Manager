@@ -21,11 +21,37 @@
     }
     require_once(PROJECT_ROOT . 'helper/dbconnect.php');
 
+    // create new event
+    if(isset($_POST['createEvent'])) {
+        $titel = trim($_POST['titel']);
+        $text = trim($_POST['description']); // get posted data and remove whitespace
+        $amountP = trim($_POST['amountP']);
+
+        if(date($_POST['startDate']) > date($_POST['endDate'])) {
+          $errTyp = "danger";
+          $errMSGTaetigkeit = "Bitte Start- und End-Datum überprüfen!";
+        } else if(strlen($titel) > 0 && $amountP > 0) {
+            $db = new Db();
+            $ret = $db->insertNewEvent($titel, $amountP, date($_POST['startDate']), date($_POST['endDate']), $text);
+
+            if($ret) {
+                $errTyp = "success";
+                $errMSGTaetigkeit = "Tätigkeit erfoglreich angelegt!";
+            } else {
+                $errTyp = "danger";
+                $errMSGTaetigkeit = "Es ist ein Fehler aufgetreten!";
+            }
+        } else {
+          $errTyp = "danger";
+          $errMSGTaetigkeit = "Fehler im Titel oder der Teilnehmeranzahl!";
+        }
+    }
+
     // handle new "News" entry
     if(isset($_POST['createNews'])) {
         $text = trim($_POST['text']); // get posted data and remove whitespace
         $titel = trim($_POST['titel']);
-        if(strlen($text) > 10 && strlen($text) > 5) {
+        if(strlen($text) > 10 && strlen($titel) > 5) {
             $db = new Db();
             $ret = $db->insertNewNews($titel, $text);
             if($ret) {
@@ -48,6 +74,57 @@
         <div class="row">
             <div class="col-sm-12">
                 <h3>T&auml;tigkeiten</h3>
+            </div>
+            <div class="col-sm-12">
+              <div class="form-group">
+              <hr/>
+              </div>
+              <?php
+              if (isset($errMSGTaetigkeit)) {
+                  ?>
+                  <div class="form-group">
+                      <div class="alert alert-<?php echo ($errTyp == "success") ? "success" : $errTyp; ?>">
+                          <span class="glyphicon glyphicon-info-sign"></span> <?php echo $errMSGTaetigkeit; ?>
+                      </div>
+                  </div>
+                  <?php
+              }
+              ?>
+              <form method="post">
+                  <div class="form-group">
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-envelope-open-o" aria-hidden="true"></i></span>
+                          <input type="text" name="titel" class="form-control" placeholder="Titel" required/>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i></span>
+                          <input type="number" name="amountP" class="form-control" placeholder="Teilnehmerzahl" required/>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                          <input type="text" name="startDate" id="startDatepicker" placeholder="Start" required>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                          <input type="text" name="endDate" id="endDatepicker" placeholder="Ende" required>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="fa fa-envelope-open-o" aria-hidden="true"></i></span>
+                          <textarea name="description" cols="80" rows="5" placeholder="Beschreibung"></textarea>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <button type="submit" class="btn btn-block btn-primary" name="createEvent">Tätigkeit erstellen</button>
+                  </div>
+              </form>
             </div>
         </div>
         <div class="row">
