@@ -80,6 +80,87 @@ class Db {
     }
 
     /**
+     * Query the database for the upcoming events
+     *
+     * @return returns json array of events
+     */
+    public function queryForEvents($start, $end) {
+        $connection = $this->connect();
+
+        $events = array();
+
+        $stmt = $connection->prepare("SELECT id, start , end, title FROM  events where (date(start) >= ? AND date(start) <= ?)");
+        $stmt->bind_param("ss", $start, $end);
+        $stmt->execute();
+        $stmt->bind_result($id, $start, $end, $title);
+        while($stmt->fetch()) {
+            $e = array();
+            $e['id']= $id;
+            $e['start']= $start;
+            $e['end']= $end;
+            $e['title']= $title;
+            array_push($events, $e);
+        }
+        $stmt->close();
+
+        return json_encode($events);
+    }
+
+    /**
+     * Query the database for the events on a day
+     *
+     * @return returns json array of events
+     */
+    public function queryForEventsOnDay($start) {
+        $connection = $this->connect();
+
+        $events = array();
+
+        $stmt = $connection->prepare("SELECT id, start , end, title, description, participants FROM events where (date(start) = ?)");
+        $stmt->bind_param("s", $start);
+        $stmt->execute();
+        $stmt->bind_result($id, $start, $end, $title, $description, $participants);
+        while($stmt->fetch()) {
+            $e = array();
+            $e['id']= $id;
+            $e['start']= $start;
+            $e['end']= $end;
+            $e['title']= $title;
+            $e['description']= $description;
+            $e['participants']= $participants;
+            array_push($events, $e);
+        }
+        $stmt->close();
+
+        return $events;
+    }
+
+    /**
+     * Query the database for the participants on a event
+     *
+     * @return returns return an arry of names and id's
+     */
+    public function queryForParticipantsOnEvent($event_id) {
+        $connection = $this->connect();
+
+        $arr_id = array();
+
+        $stmt = $connection->prepare("SELECT u.id, u.Vorname, u.Nachname FROM users_events ue, users u WHERE ue.event_id = ? AND ue.users_id = u.id");
+        $stmt->bind_param("i", $event_id);
+        $stmt->execute();
+        $stmt->bind_result($id, $forename, $lastname);
+        $participants_string = "";
+        while($stmt->fetch()) {
+            $participants_string .= $forename . " " . $lastname . "; ";
+            // check if user is already a participant
+            array_push($arr_id, $id);
+        }
+        $stmt->close();
+
+        return [$participants_string, $arr_id];
+    }
+
+    /**
      * Query the database for users that are not activated yet
      *
      * @return returns array of users
@@ -209,6 +290,49 @@ class Db {
 
         $stmt = $connection->prepare("INSERT INTO news (titel, text, active) VALUES (?, ?, ?)");
         $stmt->bind_param("ssi", $titel, $text, $active);
+        if($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            $stmt->close();
+            return false;
+        }
+        printf("Error: %s.\n", $stmt->error);
+    }
+
+    /**
+     * insert entry to users_events
+     *
+     *
+     * @return return true if success
+     */
+    public function insertNewParticipant($user_id, $event_id) {
+        $connection = $this->connect();
+
+        $active = 1;
+
+        $stmt = $connection->prepare("INSERT INTO users_events (users_id, event_id) VALUES (?, ?)");
+        $stmt->bind_param("ii", $user_id, $event_id);
+        if($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            $stmt->close();
+            return false;
+        }
+    }
+
+    /**
+     * delete entry from users_events
+     *
+     *
+     * @return return true if success
+     */
+    public function deleteEntryFromUsersEvents($user_id, $event_id) {
+        $connection = $this->connect();
+
+        $stmt = $connection->prepare("DELETE FROM users_events WHERE users_id=? AND event_id=?");
+        $stmt->bind_param("ii", $user_id, $event_id);
         if($stmt->execute()) {
             $stmt->close();
             return true;

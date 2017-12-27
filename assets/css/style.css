@@ -5,6 +5,7 @@
 	margin:0;
 	padding:0;
 }
+
 #login-form {
 	margin:5% auto;
 	max-width:500px;
@@ -12,4 +13,9 @@
 /* home page */
 #wrapper{
 	padding-top:50px;
+}
+
+/* highlight actual day in fullCalendar */
+.fc-unthemed td.fc-today {
+    background: #ea7c7c;
 }
