@@ -53,7 +53,7 @@ class Db {
     /**
      * Query the database for an email, id and password hash
      *
-     * @return returns email as string or false
+     * @return returns array of user
      */
     public function queryForIDPassEmail($email) {
         $connection = $this->connect();
@@ -75,6 +75,26 @@ class Db {
             $arr['email'] = $dbEmail;
         }
 
+        $stmt->close();
+        return $arr;
+    }
+
+    /**
+     * Query the database for users that are not activated yet
+     *
+     * @return returns array of users
+     */
+    public function queryForNonActUsers() {
+        $connection = $this->connect();
+
+        $arr = array();
+
+        $stmt = $connection->prepare("SELECT id, vorname, nachname, email FROM users WHERE active = 0");
+        $stmt->execute();
+        $stmt->bind_result($id, $forename, $surname, $dbEmail);
+        while($stmt->fetch()) {
+            array_push($arr, $id, $forename, $surname, $dbEmail);
+        }
         $stmt->close();
         return $arr;
     }
@@ -102,7 +122,7 @@ class Db {
     /**
      * deactive a news entry by the given id
      *
-     * @return returns true on access
+     * @return returns true on success
      */
     public function deactivateNews($id) {
         $connection = $this->connect();
@@ -117,6 +137,42 @@ class Db {
         return true;
     }
 
+
+    /**
+     * activate a new user
+     *
+     * @return returns true on success
+     */
+    public function activateUser($id) {
+        $connection = $this->connect();
+
+        $stmt = $connection->prepare("UPDATE `users` SET active=1 WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        if(!$stmt->execute()) {
+            $stmt->close();
+            return false;
+        };
+        $stmt->close();
+        return true;
+    }
+
+    /**
+     * reset password for user
+     *
+     * @return returns true on success
+     */
+    public function resetPassword($email, $hash_pwd) {
+        $connection = $this->connect();
+
+        $stmt = $connection->prepare("UPDATE `users` SET password=? WHERE email = ?");
+        $stmt->bind_param("ss", $hash_pwd, $email);
+        if(!$stmt->execute()) {
+            $stmt->close();
+            return false;
+        };
+        $stmt->close();
+        return true;
+    }
 
     /**
      * insert a new User

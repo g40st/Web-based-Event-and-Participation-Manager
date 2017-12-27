@@ -76,16 +76,16 @@
                 <div class="form-group">
                     <h4 class="">Neue Nachricht</h4>
                 </div>
-                <form method="post" autocomplete="off">
+                <form method="post">
                     <div class="form-group">
                         <div class="input-group">
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                            <span class="input-group-addon"><i class="fa fa-envelope-open-o" aria-hidden="true"></i></span>
                             <input type="text" name="titel" class="form-control" placeholder="Titel" required/>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="input-group">
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                            <span class="input-group-addon"><i class="fa fa-envelope-open-o" aria-hidden="true"></i></span>
                             <textarea name="text" cols="80" rows="5" placeholder="Nachricht"></textarea>
                         </div>
                     </div>

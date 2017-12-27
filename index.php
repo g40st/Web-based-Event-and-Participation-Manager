@@ -9,13 +9,16 @@
     session_start();
     require_once('conf/path.php');
 
-    if (!isset($_SESSION['user'])) {    // Keine Session vorhanden -> umleiten auf Loginseite
+    if (!isset($_SESSION['user'])) {        // Keine Session vorhanden -> umleiten auf Loginseite
         header("Location: " . BASE_URL . "view_login/login.php");
         exit;
-    } elseif($_SESSION['adminFlag'] == 0) { // User-Seite laden
+    } elseif($_SESSION['adminFlag'] == 0) {                           // User-Seite laden
         header("Location: " . BASE_URL . "view_user/index.php");
         exit;
-    } elseif($_SESSION['adminFlag'] == 1) { // Admin-Seite laden
+    } elseif($_SESSION['adminFlag'] == 1 && $_SESSION['user'] == 1) { // Super-Admin-Seite laden
+        header("Location: " . BASE_URL . "view_sadmin/index.php");
+        exit;
+    } elseif($_SESSION['adminFlag'] == 1) {                           // Admin-Seite laden
         header("Location: " . BASE_URL . "view_admin/index.php");
         exit;
     }

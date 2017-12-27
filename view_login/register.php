@@ -82,32 +82,32 @@
                 ?>
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
                         <input type="text" name="uname" class="form-control" placeholder="Vorname" required/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
                         <input type="text" name="sname" class="form-control" placeholder="Nachname" required/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                        <span class="input-group-addon"><i class="fa fa-envelope" aria-hidden="true"></i></span></span>
                         <input type="email" name="email" class="form-control" placeholder="Email Adresse" required/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                        <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
                         <input type="password" name="pass" class="form-control" placeholder="Passwort"
                                required/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                        <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
                         <input type="password" name="pass2" class="form-control" placeholder="Password wiederholen"
                                required/>
                     </div>

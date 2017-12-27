@@ -4,7 +4,7 @@
    *
    * author: Christian Högerle
    */
-   
+
     ob_start();
     session_start();
     require_once('../conf/path.php');
@@ -38,7 +38,7 @@
 
 <div class="container">
     <div id="login-form">
-        <form method="post" autocomplete="off">
+        <form method="post">
             <div class="col-md-12">
                 <div class="form-group">
                     <h2 class="">Login:</h2>
@@ -47,26 +47,25 @@
                     <hr/>
                 </div>
                 <?php
-                if (isset($errMSG)) {
-
-                    ?>
+                  if (isset($errMSG)) {
+                ?>
                     <div class="form-group">
                         <div class="alert alert-danger">
                             <span class="glyphicon glyphicon-info-sign"></span> <?php echo $errMSG; ?>
                         </div>
                     </div>
-                    <?php
-                }
+                <?php
+                  }
                 ?>
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                        <span class="input-group-addon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
                         <input type="email" name="email" class="form-control" placeholder="Email" required/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                        <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
                         <input type="password" name="pass" class="form-control" placeholder="Password" required/>
                     </div>
                 </div>

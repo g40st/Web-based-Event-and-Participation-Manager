@@ -20,6 +20,7 @@ function sendMailToAdmin($from) {
     try {
         //Server settings
         $mail->SMTPDebug = SMTP_DEBUG;
+        $mail->CharSet = 'UTF-8';
         $mail->isSMTP();
         $mail->Host = SMTP_HOST;
         $mail->SMTPAuth = true;
@@ -43,24 +44,34 @@ function sendMailToAdmin($from) {
     }
 }
 
+function sendMailToUser($to) {
+    $mail = new PHPMailer(true);
+    try {
+        //Server settings
+        $mail->SMTPDebug = SMTP_DEBUG;
+        $mail->CharSet = 'UTF-8';
+        $mail->isSMTP();
+        $mail->Host = SMTP_HOST;
+        $mail->SMTPAuth = true;
+        $mail->Username = SMTP_USERNAME;
+        $mail->Password = SMTP_PASSWORD;
+        $mail->SMTPSecure = SMTP_SECURE;
+        $mail->Port = SMTP_PORT;
+        $mail->setFrom(SMTP_USERNAME);
 
+        $mail->addAddress(ADMIN_EMAIL);     // send this mail to the admin
+        $mail->addAddress($to);
 
+        //Content
+        $mail->isHTML(false);
+        $mail->Subject = 'Benutzer wurde aktiviert';
+        $mail->Body    = 'Ihr Benutzer wurde aktiviert. Sie können sich nun anmelden.';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        $mail->send();
+    } catch (Exception $e) {
+        echo 'Message could not be sent.';
+        //echo 'Mailer Error: ' . $mail->ErrorInfo;
+    }
+}
 
 ?>
