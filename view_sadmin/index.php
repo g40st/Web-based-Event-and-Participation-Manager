@@ -114,6 +114,7 @@
           <button type="submit" class="btn btn-block btn-primary" name="btn-reset">Reset</button>
       </div>
     </from>
-
+    <br><br>
+    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="<?php echo(BASE_URL)?>view_login/logout.php?logout">Logout</a>
   </body>
 </html>
