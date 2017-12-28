@@ -33,10 +33,12 @@ class Db {
     /**
      * Query the database for an user
      *
-     * @return returns email as string or false
+     * @return returns email of user as string or false
      */
     public function queryForEmail($email) {
         $connection = $this->connect();
+
+        $email = $connection->real_escape_string($email);
 
         $stmt = $connection->prepare("SELECT email FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
@@ -57,6 +59,8 @@ class Db {
      */
     public function queryForIDPassEmail($email) {
         $connection = $this->connect();
+
+        $email = $connection->real_escape_string($email);
 
         $arr = array();
 
@@ -87,6 +91,9 @@ class Db {
     public function queryForEvents($start, $end) {
         $connection = $this->connect();
 
+        $start = $connection->real_escape_string($start);
+        $end = $connection->real_escape_string($end);
+
         $events = array();
 
         $stmt = $connection->prepare("SELECT id, start , end, title FROM  events where (date(start) >= ? AND date(start) <= ?)");
@@ -113,6 +120,8 @@ class Db {
      */
     public function queryForEventsOnDay($start) {
         $connection = $this->connect();
+
+        $start = $connection->real_escape_string($start);
 
         $events = array();
 
@@ -142,6 +151,8 @@ class Db {
      */
     public function queryForParticipantsOnEvent($event_id) {
         $connection = $this->connect();
+
+        $event_id = $connection->real_escape_string($event_id);
 
         $arr_id = array();
 
@@ -208,6 +219,8 @@ class Db {
     public function deactivateNews($id) {
         $connection = $this->connect();
 
+        $id = $connection->real_escape_string($id);
+
         $stmt = $connection->prepare("UPDATE `news` SET active=0 WHERE id = ?");
         $stmt->bind_param("i", $id);
         if(!$stmt->execute()) {
@@ -227,6 +240,8 @@ class Db {
     public function activateUser($id) {
         $connection = $this->connect();
 
+        $id = $connection->real_escape_string($id);
+
         $stmt = $connection->prepare("UPDATE `users` SET active=1 WHERE id = ?");
         $stmt->bind_param("i", $id);
         if(!$stmt->execute()) {
@@ -244,6 +259,8 @@ class Db {
      */
     public function resetPassword($email, $hash_pwd) {
         $connection = $this->connect();
+
+        $email = $connection->real_escape_string($email);
 
         $stmt = $connection->prepare("UPDATE `users` SET password=? WHERE email = ?");
         $stmt->bind_param("ss", $hash_pwd, $email);
@@ -263,6 +280,9 @@ class Db {
     public function insertNewUser($firstname, $lastname, $email, $hash_pwd) {
         $connection = $this->connect();
 
+        $firstname = $connection->real_escape_string($firstname);
+        $lastname = $connection->real_escape_string($lastname);
+        $email = $connection->real_escape_string($email);
         $flagAdmin = 0;
 
         $stmt = $connection->prepare("INSERT INTO users (flagAdmin, Vorname, Nachname, Email, password) VALUES (?, ?, ?, ?, ?)");
@@ -286,6 +306,8 @@ class Db {
     public function insertNewNews($titel, $text) {
         $connection = $this->connect();
 
+        $titel = $connection->real_escape_string($titel);
+        $text = $connection->real_escape_string($text);
         $active = 1;
 
         $stmt = $connection->prepare("INSERT INTO news (titel, text, active) VALUES (?, ?, ?)");
@@ -309,6 +331,12 @@ class Db {
     public function insertNewEvent($title, $amountP, $start, $end, $description) {
         $connection = $this->connect();
 
+        $title = $connection->real_escape_string($title);
+        $amountP = $connection->real_escape_string($amountP);
+        $start = $connection->real_escape_string($start);
+        $end = $connection->real_escape_string($end);
+        $description = $connection->real_escape_string($description);
+
         $stmt = $connection->prepare("INSERT INTO events (id, title, start, end, participants, description) VALUES (NULL, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sssis", $title, $start, $end, $amountP, $description);
         if($stmt->execute()) {
@@ -330,7 +358,8 @@ class Db {
     public function insertNewParticipant($user_id, $event_id) {
         $connection = $this->connect();
 
-        $active = 1;
+        $user_id = $connection->real_escape_string($user_id);
+        $event_id = $connection->real_escape_string($event_id);
 
         $stmt = $connection->prepare("INSERT INTO users_events (users_id, event_id) VALUES (?, ?)");
         $stmt->bind_param("ii", $user_id, $event_id);
@@ -351,6 +380,9 @@ class Db {
      */
     public function deleteEntryFromUsersEvents($user_id, $event_id) {
         $connection = $this->connect();
+
+        $user_id = $connection->real_escape_string($user_id);
+        $event_id = $connection->real_escape_string($event_id);
 
         $stmt = $connection->prepare("DELETE FROM users_events WHERE users_id=? AND event_id=?");
         $stmt->bind_param("ii", $user_id, $event_id);

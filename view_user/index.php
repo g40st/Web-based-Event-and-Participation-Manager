@@ -17,7 +17,8 @@
     }
 
     require_once(PROJECT_ROOT . 'helper/dbconnect.php');
-    // load news from database
+
+    // load all active news from database
     $db = new Db();
     $arr_News = $db->queryForNews();
 ?>

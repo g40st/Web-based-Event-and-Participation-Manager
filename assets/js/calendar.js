@@ -1,7 +1,6 @@
 $(document).ready(function() {
 
      $('#calendar').fullCalendar({
-
         fixedWeekCount: false,
         weekNumbers: true,
         events: "ajax/events.inc.php?view=1",

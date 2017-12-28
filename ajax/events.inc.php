@@ -1,4 +1,10 @@
 <?php
+  /**
+   * This is the callback for the events handle
+   *
+   * author: Christian Högerle
+   */
+
   if(!isset($_SESSION))
   {
       session_start();
@@ -10,19 +16,19 @@
       exit;
   }
 
+  require_once('../conf/path.php');
+  require_once(PROJECT_ROOT . 'helper/dbconnect.php');
+
   // view all events from start-date to end-date
   if(isset($_GET['view'])) {
     header('Content-Type: application/json');
     $start = trim($_GET["start"]);
     $end = trim($_GET["end"]);
 
-    require_once('../conf/path.php');
-    require_once(PROJECT_ROOT . 'helper/dbconnect.php');
     $db = new Db();
     $json_events = $db->queryForEvents($start, $end);
 
     echo($json_events);
-
     exit;
   }
 
@@ -31,8 +37,6 @@
       header('Content-Type: application/json');
       $day = trim($_POST["day"]);
 
-      require_once('../conf/path.php');
-      require_once(PROJECT_ROOT . 'helper/dbconnect.php');
       $db = new Db();
       // get all events on this date
       $json_events = $db->queryForEventsOnDay($day);
@@ -64,27 +68,24 @@
       exit;
   }
 
-// insert or delete participant
-if($_POST['req_type'] === "setParticipant") {
-    require_once('../conf/path.php');
-    require_once(PROJECT_ROOT . 'helper/dbconnect.php');
-    if($_POST['type'] === "Austragen") {
-      $id = trim($_POST['event_id']);
+  // insert or delete participant
+  if($_POST['req_type'] === "setParticipant") {
+      if($_POST['type'] === "Austragen") {
+        $id = trim($_POST['event_id']);
 
-      $db = new Db();
-      $result = $db->deleteEntryFromUsersEvents($_SESSION['user'], $id);
+        $db = new Db();
+        $result = $db->deleteEntryFromUsersEvents($_SESSION['user'], $id);
 
-      echo($result);
-    } else {
-      $id = trim($_POST['event_id']);
+        echo($result);
+      } else {
+        $id = trim($_POST['event_id']);
 
-      $db = new Db();
-      $result = $db->insertNewParticipant($_SESSION['user'], $id);
+        $db = new Db();
+        $result = $db->insertNewParticipant($_SESSION['user'], $id);
 
-      echo($result);
-
-    }
-    exit;
-}
+        echo($result);
+      }
+      exit;
+  }
 
 ?>

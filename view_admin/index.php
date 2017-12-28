@@ -21,7 +21,7 @@
     }
     require_once(PROJECT_ROOT . 'helper/dbconnect.php');
 
-    // create new event
+    // create a new event
     if(isset($_POST['createEvent'])) {
         $titel = trim($_POST['titel']);
         $text = trim($_POST['description']); // get posted data and remove whitespace
@@ -73,22 +73,22 @@
         <h2 class="text-center text-uppercase text-secondary mb-0">Admin</h2>
         <div class="row">
             <div class="col-sm-12">
-                <h3>T&auml;tigkeiten</h3>
+                <br><h3>T&auml;tigkeiten</h3><br>
             </div>
             <div class="col-sm-12">
               <div class="form-group">
               <hr/>
               </div>
               <?php
-              if (isset($errMSGTaetigkeit)) {
-                  ?>
+                if (isset($errMSGTaetigkeit)) {
+              ?>
                   <div class="form-group">
                       <div class="alert alert-<?php echo ($errTyp == "success") ? "success" : $errTyp; ?>">
                           <span class="glyphicon glyphicon-info-sign"></span> <?php echo $errMSGTaetigkeit; ?>
                       </div>
                   </div>
-                  <?php
-              }
+              <?php
+                }
               ?>
               <form method="post">
                   <div class="form-group">
@@ -127,9 +127,12 @@
               </form>
             </div>
         </div>
+        <br><br>
+        <hr><hr><hr>
+        <br><br>
         <div class="row">
             <div class="col-sm-12" id="newsAdmin">
-                <h3>News</h3>
+                <h3>News</h3><br>
             </div>
                 <?php require_once('../helper/news.php');
                       echo(printNews($arr_News, 1));
@@ -140,15 +143,15 @@
                 <hr/>
                 </div>
                 <?php
-                if (isset($errMSG)) {
-                    ?>
+                  if (isset($errMSG)) {
+                ?>
                     <div class="form-group">
                         <div class="alert alert-<?php echo ($errTyp == "success") ? "success" : $errTyp; ?>">
                             <span class="glyphicon glyphicon-info-sign"></span> <?php echo $errMSG; ?>
                         </div>
                     </div>
-                    <?php
-                }
+                <?php
+                  }
                 ?>
                 <div class="form-group">
                     <h4 class="">Neue Nachricht</h4>
