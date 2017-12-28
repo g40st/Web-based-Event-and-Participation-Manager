@@ -1,6 +1,12 @@
 # Web-based Event and Participation Manager
+This is a web-based event and participation manager. Admins can create events and users can participate these events. 
 
+![participate](https://user-images.githubusercontent.com/7523395/34412178-0e30e200-ebdc-11e7-8c82-b5db12b3e81a.gif)
 
+## create event (admin)
+There is also an opportunity to create a news. 
+
+![createevent](https://user-images.githubusercontent.com/7523395/34412243-653ec170-ebdc-11e7-9c28-db41fbf84151.gif)
 
 ## Dependencies
 
@@ -21,14 +27,14 @@
 4. Import the sql-file out of the sql-schema folder. 
 5. Create an user to access this database.
 6. Edit the db_config_sample.php to your setup. And rename the file to: db_config.php
-7. Edit the path_sample.php and SMTP_config_sample.php to your setup and rename these according to the comments in the file.
+7. Edit the path_sample.php and SMTP_config_sample.php to your setup and rename these files according to the comments in the file.
 8. Do a first test: Go to your specified url and try to load the project. Then choose some login credentials and click on login. This should be shown: 
 
 ![image](https://user-images.githubusercontent.com/7523395/34408213-c618b5ba-ebc2-11e7-99c4-484d7197cd8d.png)
 
 9. There is a super admin account. This account is used to activate new users and to reset passwords. 
     * Create a normal user over the register form. 
-    * Go into the table "users" and set these flags: "active" = 1 and flagAdmin" = 1. 
+    * Go into the table "users" and set these flags: "active" = 1 and "flagAdmin" = 1. 
     * set the "id" = 1  
 
 10. Try the super admin login. You should see this: 
