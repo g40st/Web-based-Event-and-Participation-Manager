@@ -13,8 +13,43 @@
 * [Magnific Popup](http://dimsemenov.com/plugins/magnific-popup/)
 * [datetimepicker](https://github.com/xdan/datetimepicker)
 
-## Usage
+## Installing / Getting started
 
+1. Install an Apache Webserver, MySQL and PHP. I recommend to use PHP 7.x. You can use the package [XAMPP](https://www.apachefriends.org/index.html). In this package everthing is included what you need.
+2. Download the repository into the htdocs folder. Maybe you want to rename the folder.
+3. Create an empty database on your MySQL. 
+4. Import the sql-file out of the sql-schema folder. 
+5. Create an user to access this database.
+6. Edit the db_config_sample.php to your setup. And rename the file to: db_config.php
+7. Edit the path_sample.php and SMTP_config_sample.php to your setup and rename these according to the comments in the file.
+8. Do a first test: Go to your specified url and try to load the project. Then choose some login credentials and click on login. This should be shown: 
+
+![image](https://user-images.githubusercontent.com/7523395/34408213-c618b5ba-ebc2-11e7-99c4-484d7197cd8d.png)
+
+9. There is a super admin account. This account is used to activate new users and to reset passwords. 
+    * Create a normal user over the register form. 
+    * Go into the table "users" and set these flags: "active" = 1 and flagAdmin" = 1. 
+    * set the "id" = 1  
+
+10. Try the super admin login. You should see this: 
+
+  ![image](https://user-images.githubusercontent.com/7523395/34408400-f6c97ea0-ebc3-11e7-9455-2b539f1b7d40.png)
+
+11. Normal users can be set to be admin. Use the "flagAdmin" to do this. 
+
+## Usage
+Go to your browser and use the specified url: http://127.0.0.1/EventManager/
+
+## Nice to Know
+
+### Super Admin
+The super admin can activate new users and reset passwords. There is only one super admin. The super admin has the id equals 1.
+
+### Admin
+Every normal user can be set to be admin. This can be done by editing the user in MySQL. To do so set the "flagAdmin" equals 1. Admin users can create new events and news. They also can deactivate old news.
+
+### Users
+Normal users can see the events and news. Furthermore they can participate events.
 
 ## Author
 Christian Högerle
