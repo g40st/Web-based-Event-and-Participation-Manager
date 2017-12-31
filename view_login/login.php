@@ -30,7 +30,10 @@
             $_SESSION['user'] = $arr_User['id'];
             $_SESSION['adminFlag'] = $arr_User['flagAdmin'];
             header("Location: " . BASE_URL . "index.php");
-        } else $errMSG = "User or Password wrong!";
+        } else {
+          $errMSG = "user or password wrong!";
+          sleep(3);
+        }
     }
 ?>
 
