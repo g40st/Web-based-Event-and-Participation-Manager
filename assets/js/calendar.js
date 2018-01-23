@@ -95,8 +95,8 @@ function callbackClick(date, jsEvent, view, element) {
                 } else {
                   eventTable +=  '<tr><td></td><td><button type="button" id=' + json[index]['id'] + ' class="btn btn-primary btn-participate">Teilnehmen</button></td></td>';
                 }
-                eventTable +=  '<tr><td>Beschreibung</td><td>' + json[index]['description']  + '</td></td>';
-                eventTable +=  '<tr><td>Kommentare <br><button type="button" data-event-id=' + json[index]['id'] + ' class="btn btn-success btn-comment" data-toggle="modal" data-target="#newCommentModal">Erstellen</button> </td><td>' + json[index]['comments']  + '</td></td>';
+                eventTable +=  '<tr><td>Beschreibung</td><td>' + json[index]['description'].replace(/\\r\\n/g, "<br>")  + '</td></td>';
+                eventTable +=  '<tr><td>Kommentare <br><button type="button" data-event-id=' + json[index]['id'] + ' class="btn btn-success btn-comment" data-toggle="modal" data-target="#newCommentModal">Erstellen</button> </td><td>' + json[index]['comments'].replace(/\\r\\n/g, "<br>")  + '</td></td>';
                 eventTable += '</table></div>';
 
                 $('#tableEvents').append(eventTable);
