@@ -180,7 +180,7 @@ class Db {
     /**
      * Query the database for the comments on a event
      *
-     * @return returns return an arry of the comments
+     * @return returns return an string of the comments
      */
     public function queryForCommentsOnEvent($event_id) {
         $connection = $this->connect();
@@ -188,7 +188,6 @@ class Db {
         $event_id = $connection->real_escape_string($event_id);
 
         $stmt = $connection->prepare("SELECT co.comment, co.timestamp, u.Vorname, u.Nachname FROM comments co, users u WHERE co.id_event = ? AND co.id_user = u.id ORDER BY co.timestamp DESC");
-        #$stmt = $connection->prepare("SELECT comment FROM comments WHERE id_event = ?");
         $stmt->bind_param("i", $event_id);
         $stmt->execute();
         $stmt->bind_result($comment,$timestamp,$firstname,$lastname);

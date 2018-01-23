@@ -63,9 +63,9 @@
           $json_events[$i] += $sign;
 
           // query for comment $comment_string
-          $arr_result2 = $db->queryForCommentsOnEvent($json_events[$i]['id']);
-          $p['comments'] = $arr_result2;
-          $json_events[$i] += $p;
+          $str_comments = $db->queryForCommentsOnEvent($json_events[$i]['id']);
+          $comment['comments'] = $str_comments;
+          $json_events[$i] += $comment;
 
         }
       }
