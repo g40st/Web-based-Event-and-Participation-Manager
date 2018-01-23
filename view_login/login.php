@@ -29,6 +29,13 @@
         } elseif($arr_User['status'] && checkPasswordHash($_POST['pass'], $arr_User['passwordHash'])) {
             $_SESSION['user'] = $arr_User['id'];
             $_SESSION['adminFlag'] = $arr_User['flagAdmin'];
+            $actTime = date('Y-m-d H:i:s');
+            $_SESSION['lastLogin'] = $arr_User['timestamp'];
+
+            // add the last login time to the user
+            $res = $db->updateLastLoginTime($arr_User['id'], $actTime);
+            // TODO: check for res (true = success)
+
             header("Location: " . BASE_URL . "index.php");
         } else {
           $errMSG = "user or password wrong!";

@@ -4,7 +4,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">   
+    <meta name="description" content="">
     <meta http-equiv="content-language" content="de" />
     <meta name="robots" content="index, follow" />
 
@@ -20,5 +20,4 @@
 
 </head>
 <body>
-    <noscript><h2>JavaScript muss aktiviert sein um eine Reservierung vorzunehmen!</h2></noscript>
-    
+    <noscript><h2>JavaScript muss aktiviert sein, um diese Plattform verwenden zu können!</h2></noscript>

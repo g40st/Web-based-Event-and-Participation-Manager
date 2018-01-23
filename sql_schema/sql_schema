@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 23, 2018 at 05:45 PM
+-- Generation Time: Jan 23, 2018 at 10:27 PM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -49,7 +49,7 @@ CREATE TABLE `events` (
   `end` datetime DEFAULT NULL,
   `description` varchar(2000) COLLATE utf8_bin DEFAULT NULL,
   `participants` int(11) NOT NULL,
-  `comments` mediumtext COLLATE utf8_bin NOT NULL
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -79,7 +79,8 @@ CREATE TABLE `users` (
   `Vorname` varchar(50) COLLATE utf8_bin NOT NULL,
   `Nachname` varchar(50) COLLATE utf8_bin NOT NULL,
   `Email` varchar(100) COLLATE utf8_bin NOT NULL,
-  `password` varchar(200) COLLATE utf8_bin NOT NULL
+  `password` varchar(200) COLLATE utf8_bin NOT NULL,
+  `last_login` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -141,13 +142,13 @@ ALTER TABLE `users_events`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `news`

@@ -64,10 +64,10 @@ class Db {
 
         $arr = array();
 
-        $stmt = $connection->prepare("SELECT id, active, flagAdmin, password, email FROM users WHERE email = ?");
+        $stmt = $connection->prepare("SELECT id, active, flagAdmin, password, email, last_login FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
-        $stmt->bind_result($id, $active, $flagAdmin, $passwordHash, $dbEmail);
+        $stmt->bind_result($id, $active, $flagAdmin, $passwordHash, $dbEmail, $timestamp);
         if(!$stmt->fetch()) {
             $arr['status'] = false;
         } else {
@@ -77,6 +77,7 @@ class Db {
             $arr['flagAdmin'] = $flagAdmin;
             $arr['passwordHash'] = $passwordHash;
             $arr['email'] = $dbEmail;
+            $arr['timestamp'] = $timestamp;
         }
 
         $stmt->close();
@@ -96,16 +97,21 @@ class Db {
 
         $events = array();
 
-        $stmt = $connection->prepare("SELECT id, start , end, title FROM  events where (date(start) >= ? AND date(start) <= ?)");
+        $stmt = $connection->prepare("SELECT id, start , end, title, timestamp FROM  events where (date(start) >= ? AND date(start) <= ?)");
         $stmt->bind_param("ss", $start, $end);
         $stmt->execute();
-        $stmt->bind_result($id, $start, $end, $title);
+        $stmt->bind_result($id, $start, $end, $title, $timestamp);
         while($stmt->fetch()) {
             $e = array();
             $e['id']= $id;
             $e['start']= $start;
             $e['end']= $end;
             $e['title']= $title;
+
+            // highlight new events
+            if($_SESSION['lastLogin'] < $timestamp) {
+              $e['color']= '#ff9933';
+            }
             array_push($events, $e);
         }
         $stmt->close();
@@ -248,6 +254,26 @@ class Db {
 
         $stmt = $connection->prepare("UPDATE `news` SET active=0 WHERE id = ?");
         $stmt->bind_param("i", $id);
+        if(!$stmt->execute()) {
+            $stmt->close();
+            return false;
+        };
+        $stmt->close();
+        return true;
+    }
+
+    /**
+     * update the last login time of user
+     *
+     * @return returns true on success
+     */
+    public function updateLastLoginTime($id, $actTime) {
+        $connection = $this->connect();
+
+        $id = $connection->real_escape_string($id);
+
+        $stmt = $connection->prepare("UPDATE `users` SET last_login=? WHERE id = ?");
+        $stmt->bind_param("si", $actTime,$id);
         if(!$stmt->execute()) {
             $stmt->close();
             return false;

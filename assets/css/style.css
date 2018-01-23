@@ -19,3 +19,11 @@
 .fc-unthemed td.fc-today {
     background: #ea7c7c;
 }
+
+.fc-time {
+    font-size: .8em;
+}
+
+.fc-title {
+    font-size: .9em;
+}
