@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 28, 2017 at 11:18 AM
+-- Generation Time: Jan 23, 2018 at 05:45 PM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -25,17 +25,31 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `comments`
+--
+
+CREATE TABLE `comments` (
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_event` int(11) NOT NULL,
+  `comment` varchar(5000) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `events`
 --
 
-DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events` (
   `id` int(11) NOT NULL,
   `title` varchar(255) COLLATE utf8_bin NOT NULL,
   `start` datetime NOT NULL,
   `end` datetime DEFAULT NULL,
   `description` varchar(2000) COLLATE utf8_bin DEFAULT NULL,
-  `participants` int(11) NOT NULL
+  `participants` int(11) NOT NULL,
+  `comments` mediumtext COLLATE utf8_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -44,7 +58,6 @@ CREATE TABLE `events` (
 -- Table structure for table `news`
 --
 
-DROP TABLE IF EXISTS `news`;
 CREATE TABLE `news` (
   `id` int(11) NOT NULL,
   `active` int(11) NOT NULL,
@@ -59,7 +72,6 @@ CREATE TABLE `news` (
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `active` int(11) DEFAULT '0',
@@ -76,7 +88,6 @@ CREATE TABLE `users` (
 -- Table structure for table `users_events`
 --
 
-DROP TABLE IF EXISTS `users_events`;
 CREATE TABLE `users_events` (
   `id` int(11) NOT NULL,
   `users_id` int(11) NOT NULL,
@@ -86,6 +97,14 @@ CREATE TABLE `users_events` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_user` (`id_user`),
+  ADD KEY `id_event` (`id_event`);
 
 --
 -- Indexes for table `events`
@@ -119,32 +138,45 @@ ALTER TABLE `users_events`
 --
 
 --
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `news`
 --
 ALTER TABLE `news`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1500;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1504;
 
 --
 -- AUTO_INCREMENT for table `users_events`
 --
 ALTER TABLE `users_events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `comments`
+--
+ALTER TABLE `comments`
+  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`id_event`) REFERENCES `events` (`id`);
 
 --
 -- Constraints for table `users_events`

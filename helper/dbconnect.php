@@ -172,6 +172,31 @@ class Db {
     }
 
     /**
+     * Query the database for the comments on a event
+     *
+     * @return returns return an arry of the comments
+     */
+    public function queryForCommentsOnEvent($event_id) {
+        $connection = $this->connect();
+
+        $event_id = $connection->real_escape_string($event_id);
+
+        $stmt = $connection->prepare("SELECT co.comment, co.timestamp, u.Vorname, u.Nachname FROM comments co, users u WHERE co.id_event = ? AND co.id_user = u.id ORDER BY co.timestamp DESC");
+        #$stmt = $connection->prepare("SELECT comment FROM comments WHERE id_event = ?");
+        $stmt->bind_param("i", $event_id);
+        $stmt->execute();
+        $stmt->bind_result($comment,$timestamp,$firstname,$lastname);
+        $comment_string = "";
+        $timestamp = new DateTime($timestamp);
+        while($stmt->fetch()) {
+            $comment_string .= $comment . " - ". $firstname . " " . $lastname . " [" . $timestamp . "] <hr> ";
+        }
+        $stmt->close();
+
+        return $comment_string;
+    }
+
+    /**
      * Query the database for users that are not activated yet
      *
      * @return returns array of users
@@ -287,6 +312,26 @@ class Db {
 
         $stmt = $connection->prepare("INSERT INTO users (flagAdmin, Vorname, Nachname, Email, password) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("issss", $flagAdmin, $firstname, $lastname, $email, $hash_pwd);
+        if($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            //printf("Error: %s.\n", $stmt->error);
+            $stmt->close();
+            return false;
+        }
+    }
+
+    /**
+     * insert a comment
+     *
+     * @return return true if success
+     */
+    public function insertNewComment($userID, $eventID, $comment) {
+        $connection = $this->connect();
+
+        $stmt = $connection->prepare("INSERT INTO comments (id_user, id_event, comment) VALUES (?, ?, ?)");
+        $stmt->bind_param("iis", $userID, $eventID, $comment);
         if($stmt->execute()) {
             $stmt->close();
             return true;

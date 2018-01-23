@@ -35,14 +35,40 @@ $(document).ready(function() {
       // init the datetimepickers for event creation
       jQuery('#startDatepicker').datetimepicker();
       jQuery('#endDatepicker').datetimepicker();
-});
 
+      // listener for create comments
+      $(".btn-createNewComment").click(function(event) {
+        if($("#txtBoxComment").val().length > 5) {
+          $.ajax({
+              type: "POST",
+              url:  "ajax/events.inc.php",
+              contentType: "application/x-www-form-urlencoded;charset=utf-8",
+              data: "req_type=createComment&eventID="+$(this).attr("data-event-id")+"&message="+$("#txtBoxComment").val(),
+              success: function(json) {
+                $("#txtBoxComment").hide();
+                $(".btn-createNewComment").hide();
+                $("#commentSuccess").show();
+                setTimeout(function(){
+                  location.reload();
+                }, 2000);
+              },
+              error: function(json) {
+                $("#txtBoxComment").hide();
+                $(".btn-createNewComment").hide();
+                $("#commentError").show();
+              }
+          });
+        } else {
+          $("#txtBoxComment").val("Bitte mindestens 5 Zeichen eingeben!");
+        }
+      });
+});
 
 function callbackClick(date, jsEvent, view, element) {
     date.second(0);
     date.minute(0);
     date.hour(0);
-    console.log('Clicked on: ' + date.format());
+    //console.log('Clicked on: ' + date.format());
 
     $.ajax({
         type: "POST",
@@ -70,10 +96,25 @@ function callbackClick(date, jsEvent, view, element) {
                   eventTable +=  '<tr><td></td><td><button type="button" id=' + json[index]['id'] + ' class="btn btn-primary btn-participate">Teilnehmen</button></td></td>';
                 }
                 eventTable +=  '<tr><td>Beschreibung</td><td>' + json[index]['description']  + '</td></td>';
+                eventTable +=  '<tr><td>Kommentare <br><button type="button" data-event-id=' + json[index]['id'] + ' class="btn btn-success btn-comment" data-toggle="modal" data-target="#newCommentModal">Erstellen</button> </td><td>' + json[index]['comments']  + '</td></td>';
                 eventTable += '</table></div>';
 
                 $('#tableEvents').append(eventTable);
+
+
               });
+
+              // this will be called, when the modal is opened
+              $('#newCommentModal').on('show.bs.modal', function(e) {
+                  //get data-id attribute of the clicked element
+                  var eventID = $(e.relatedTarget).data('event-id');
+                  $('.btn-createNewComment').attr('data-event-id', eventID);
+                  $(".btn-createNewComment").show();
+                  $("#txtBoxComment").show();
+                  $("#commentSuccess").hide();
+                  $("#commentError").hide();
+              });
+
 
               // button for participate
               $(".btn-participate").click(function(event) {
@@ -95,6 +136,7 @@ function callbackClick(date, jsEvent, view, element) {
                       }
                     });
               });
+
             } else {
                 eventTable = '<div class="col-md-12">';
                 eventTable += '<h4>Keine Termine an diesem Tag [' + date.format('DD-MM-YYYY') + '].</h4>';
@@ -105,7 +147,6 @@ function callbackClick(date, jsEvent, view, element) {
               // automatic scroll to the section "termine"
               $('html, body').animate({scrollTop: $("#termine").offset().top-50}, 1000);
             }
-
         }
     });
 }

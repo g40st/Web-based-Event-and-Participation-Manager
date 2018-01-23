@@ -61,6 +61,12 @@
 
           $sign['signed_in'] = $signed_in;
           $json_events[$i] += $sign;
+
+          // query for comment $comment_string
+          $arr_result2 = $db->queryForCommentsOnEvent($json_events[$i]['id']);
+          $p['comments'] = $arr_result2;
+          $json_events[$i] += $p;
+
         }
       }
 
@@ -88,4 +94,12 @@
       exit;
   }
 
+  // create new comment
+  if($_POST['req_type'] === "createComment") {
+    if(strlen($_POST['message']) > 5) {
+      $db = new Db();
+      $result = $db->insertNewComment($_SESSION['user'], $_POST['eventID'], $_POST['message']);
+    }
+    exit;
+  }
 ?>
