@@ -94,7 +94,6 @@ function callbackClick(date, jsEvent, view, element) {
                         }
                       }
                     });
-
               });
             } else {
                 eventTable = '<div class="col-md-12">';
@@ -102,6 +101,11 @@ function callbackClick(date, jsEvent, view, element) {
                 eventTable += '</div>';
                 $('#tableEvents').append(eventTable);
             }
+            if(jsEvent != null) {
+              // automatic scroll to the section "termine"
+              $('html, body').animate({scrollTop: $("#termine").offset().top-50}, 1000);
+            }
+
         }
     });
 }
