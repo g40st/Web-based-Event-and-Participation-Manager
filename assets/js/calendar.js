@@ -38,7 +38,7 @@ $(document).ready(function() {
 
       // listener for create comments
       $(".btn-createNewComment").click(function(event) {
-        if($("#txtBoxComment").val().length > 5) {
+        if($("#txtBoxComment").val().length > 4) {
           $.ajax({
               type: "POST",
               url:  "ajax/events.inc.php",
@@ -59,7 +59,7 @@ $(document).ready(function() {
               }
           });
         } else {
-          $("#txtBoxComment").val("Bitte mindestens 5 Zeichen eingeben!");
+          alert("Bitte mindestens 5 Zeichen eingeben!");
         }
       });
 });

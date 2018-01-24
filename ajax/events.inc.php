@@ -96,7 +96,7 @@
 
   // create new comment
   if($_POST['req_type'] === "createComment") {
-    if(strlen($_POST['message']) > 5) {
+    if(strlen($_POST['message']) > 4) {
       $db = new Db();
       $result = $db->insertNewComment($_SESSION['user'], $_POST['eventID'], $_POST['message']);
     }
