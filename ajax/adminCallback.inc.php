@@ -30,6 +30,19 @@
         } else {
             echo(json_encode(array('data' => false)));
         }
+        exit;
+    }
+
+    // get all working hours from the users
+    if($_POST['req_type'] == "getTimeAllUsers") {
+
+        $users = $db->queryForWorkingHours();
+        if($users) {
+            echo(json_encode($users));
+        } else {
+            echo(json_encode(array('data' => false)));
+        }
+        exit;
     }
 
 ?>

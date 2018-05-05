@@ -29,6 +29,7 @@
         } elseif($arr_User['status'] && checkPasswordHash($_POST['pass'], $arr_User['passwordHash'])) {
             $_SESSION['user'] = $arr_User['id'];
             $_SESSION['adminFlag'] = $arr_User['flagAdmin'];
+            $_SESSION['timeFlag'] = $arr_User['timeFlag'];
             $actTime = date('Y-m-d H:i:s');
             $_SESSION['lastLogin'] = $arr_User['timestamp'];
 

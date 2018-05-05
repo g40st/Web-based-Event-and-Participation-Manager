@@ -64,10 +64,10 @@ class Db {
 
         $arr = array();
 
-        $stmt = $connection->prepare("SELECT id, active, flagAdmin, password, email, last_login FROM users WHERE email = ?");
+        $stmt = $connection->prepare("SELECT id, active, flagAdmin, timeFlag, password, email, last_login FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
-        $stmt->bind_result($id, $active, $flagAdmin, $passwordHash, $dbEmail, $timestamp);
+        $stmt->bind_result($id, $active, $flagAdmin, $timeFlag, $passwordHash, $dbEmail, $timestamp);
         if(!$stmt->fetch()) {
             $arr['status'] = false;
         } else {
@@ -75,6 +75,7 @@ class Db {
             $arr['active'] = $active;
             $arr['id'] = $id;
             $arr['flagAdmin'] = $flagAdmin;
+            $arr['timeFlag'] = $timeFlag;
             $arr['passwordHash'] = $passwordHash;
             $arr['email'] = $dbEmail;
             $arr['timestamp'] = $timestamp;
@@ -175,6 +176,65 @@ class Db {
         $stmt->close();
 
         return [$participants_string, $arr_id];
+    }
+
+    /**
+     * Query the database for the working hours of the users
+     *
+     * @return returns return an arry of names and id's
+     */
+    public function queryForWorkingHours() {
+        $connection = $this->connect();
+
+        $users = array();
+        $tmp_user_id = 0;
+
+        $stmt = $connection->prepare("SELECT users.id, users.Vorname, users.Nachname, users_events.start_workingTime, users_events.end_workingTime FROM users_events INNER JOIN users ON users_events.users_id = users.id");
+        $stmt->execute();
+        $stmt->bind_result($user_id, $firstname, $lastname, $start_workingTime, $end_workingTime);
+
+        $u = null;
+        while($stmt->fetch()) {
+          if($u == null) {
+            $tmp_user_id = $user_id;
+            $u = array();
+            $u['id'] = $user_id;
+            $u['firstname'] = $firstname;
+            $u['lastname'] = $lastname;
+            $u['time'] = 0;
+            $time1 = strtotime($start_workingTime);
+            $time2 = strtotime($end_workingTime);
+            if($time2 < $time1) {
+                $time2 += 24 * 60 * 60;
+            }
+            $u['time'] += ($time2 - $time1) / 60;
+          } else if($tmp_user_id == $user_id) {
+            $time1 = strtotime($start_workingTime);
+            $time2 = strtotime($end_workingTime);
+            if($time2 < $time1) {
+                $time2 += 24 * 60 * 60;
+            }
+            $u['time']+= ($time2 - $time1) / 60;
+          } else {
+            array_push($users, $u);
+            $u = array();
+            $u['id']= $user_id;
+            $u['firstname']= $firstname;
+            $u['lastname']= $lastname;
+            $u['time'] = 0;
+            $time1 = strtotime($start_workingTime);
+            $time2 = strtotime($end_workingTime);
+            if($time2 < $time1) {
+                $time2 += 24 * 60 * 60;
+            }
+            $u['time']+= ($time2 - $time1) / 60;
+          }
+        }
+        array_push($users, $u);
+
+        $stmt->close();
+
+        return $users;
     }
 
     /**

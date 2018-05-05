@@ -178,4 +178,15 @@
     </div>
 </section>
 
+<?php if($_SESSION['timeFlag'] == 1) { ?>
+    <section class="portfolio" id="time">
+      <div class="container">
+        <h2 class="text-center text-uppercase text-secondary mb-0">Zeiten</h2>
+      <br><br>
+      <a href="<?php echo(BASE_URL)?>view_admin/timetable.php" target="_blank">Link zu den Zeiten</a>
+      </div>
+    </section>
+<?php } ?>
+
+
 <?php include(PROJECT_ROOT . 'includes/footerSite.php'); ?>
