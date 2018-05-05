@@ -178,6 +178,26 @@ class Db {
     }
 
     /**
+     * Query the database for the working time of a user on a event
+     *
+     * @return returns returns the start and end time of the working time
+     */
+    public function queryForWorkingTimeOfUserOnEvent($user_id, $event_id) {
+        $connection = $this->connect();
+
+        $event_id = $connection->real_escape_string($event_id);
+
+        $stmt = $connection->prepare("SELECT start_workingTime, end_workingTime FROM users_events WHERE event_id=? AND users_id=?");
+        $stmt->bind_param("ii", $event_id, $user_id);
+        $stmt->execute();
+        $stmt->bind_result($start_workingTime, $end_workingTime);
+        $stmt->fetch();
+        $stmt->close();
+
+        return [$start_workingTime, $end_workingTime];
+    }
+
+    /**
      * Query the database for the comments on a event
      *
      * @return returns return an string of the comments
@@ -433,6 +453,32 @@ class Db {
 
         $stmt = $connection->prepare("INSERT INTO users_events (users_id, event_id) VALUES (?, ?)");
         $stmt->bind_param("ii", $user_id, $event_id);
+        if($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            $stmt->close();
+            return false;
+        }
+    }
+
+
+    /**
+     * insert entry to users_events |
+     *
+     *
+     * @return return true if success
+     */
+    public function insertWorkingTimeForUser($user_id, $event_id, $start, $end) {
+        $connection = $this->connect();
+
+        $user_id = $connection->real_escape_string($user_id);
+        $event_id = $connection->real_escape_string($event_id);
+        $start = $connection->real_escape_string($start);
+        $end = $connection->real_escape_string($end);
+
+        $stmt = $connection->prepare("UPDATE `users_events` SET start_workingTime=?, end_workingTime=? WHERE users_id=? AND event_id=?");
+        $stmt->bind_param("ssii", $start, $end, $user_id, $event_id);
         if($stmt->execute()) {
             $stmt->close();
             return true;

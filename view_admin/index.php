@@ -36,7 +36,7 @@
 
             if($ret) {
                 $errTyp = "success";
-                $errMSGTaetigkeit = "Tätigkeit erfoglreich angelegt!";
+                $errMSGTaetigkeit = "Tätigkeit erfolgreich angelegt!";
             } else {
                 $errTyp = "danger";
                 $errMSGTaetigkeit = "Es ist ein Fehler aufgetreten!";

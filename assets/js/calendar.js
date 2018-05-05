@@ -36,6 +36,10 @@ $(document).ready(function() {
       jQuery('#startDatepicker').datetimepicker();
       jQuery('#endDatepicker').datetimepicker();
 
+      // init the datetimepickers for event on user
+      jQuery('#startDatepickerUser').datetimepicker();
+      jQuery('#endDatepickerUser').datetimepicker();
+
       // listener for create comments
       $(".btn-createNewComment").click(function(event) {
         if($("#txtBoxComment").val().length > 4) {
@@ -92,6 +96,8 @@ function callbackClick(date, jsEvent, view, element) {
                 eventTable +=  '<tr><td>Teilnehmer</td><td>' + json[index]['names']  + '</td></td>';
                 if(json[index]['signed_in']) {
                   eventTable +=  '<tr><td></td><td><button type="button" id=' + json[index]['id'] + ' class="btn btn-warning btn-participate">Austragen</button></td></td>';
+                  eventTable +=  '<tr><td>Startzeit:</td><td>' + '<input type="text" name="startDateUser" id="startDatepickerUser' + json[index]['id'] + '" placeholder="15:30">'+ '</td></td>';
+                  eventTable +=  '<tr><td>Endzeit:</td><td>' + '<input type="text" name="endDateUser" id="endDatepickerUser' + json[index]['id'] + '" placeholder="17:00">' + ' <button type="button" id=buttonSaveWorkingUser_' + json[index]['id'] + ' class="btn btn-success btn-saveWorkingTime">Speichern</button></td></td>';
                 } else {
                   eventTable +=  '<tr><td></td><td><button type="button" id=' + json[index]['id'] + ' class="btn btn-primary btn-participate">Teilnehmen</button></td></td>';
                 }
@@ -101,6 +107,11 @@ function callbackClick(date, jsEvent, view, element) {
 
                 $('#tableEvents').append(eventTable);
 
+                // fill the working time of a user if it exists
+                if(json[index]['startWorking'] != "" && json[index]['endWorking'] != "") {
+                  $('#startDatepickerUser' + json[index]['id']).val(json[index]['startWorking']);
+                  $('#endDatepickerUser' + json[index]['id']).val(json[index]['endWorking']);
+                }
 
               });
 
@@ -135,6 +146,39 @@ function callbackClick(date, jsEvent, view, element) {
                         }
                       }
                     });
+              });
+
+              // button save workingTime of user
+              $(".btn-saveWorkingTime").click(function(event) {
+                  event_id = event.target.id.split("_")[1];
+                  console.log(event_id);
+                  console.log($('#startDatepickerUser'+event_id).val());
+                  // check the input of the user
+                  var patt = new RegExp("[0-9]?[0-9]\:[0-9][0-9]");
+                  console.log(patt.test($('#startDatepickerUser'+event_id).val()));
+                  if(($('#startDatepickerUser'+event_id).val() == "") || ($('#endDatepickerUser'+event_id).val() == "")) {
+                    alert("Bitte eine Start- und Endzeit eingeben.");
+                  } else if(!patt.test($('#startDatepickerUser'+event_id).val())) {
+                    alert("Feher bei der Startzeit. Bitte in der Form xx:xx angeben.");
+                  } else if(!patt.test($('#endDatepickerUser'+event_id).val())) {
+                    alert("Feher bei der Endzeit. Bitte in der Form xx:xx angeben.");
+                  } else {
+                    tmpButton = $(this)
+                    $.ajax({
+                      type: "POST",
+                      url:  "ajax/events.inc.php",
+                      contentType: "application/x-www-form-urlencoded;charset=utf-8",
+                      data: "req_type=setWorkingTime&event_id="+event_id+"&start="+$('#startDatepickerUser'+event_id).val()+"&end="+$('#endDatepickerUser'+event_id).val(),
+                      success: function(data) {
+                        if(data == 1) {
+                          tmpButton.html('gespeichert');
+                          tmpButton.prop("disabled",true);
+                        } else {
+                          alert("Es ist ein Fehler aufgetreten! Bitte versuchen Sie es später nochmals!");
+                        }
+                      }
+                    });
+                  }
               });
 
             } else {

@@ -50,6 +50,13 @@
           $p['names'] = $arr_result[0];
           $json_events[$i] += $p;
 
+          // get the working Time of a User
+          $arrWorkingTimes = $db->queryForWorkingTimeOfUserOnEvent($_SESSION['user'], $json_events[$i]['id']);
+          $startWorking['startWorking'] = $arrWorkingTimes[0];
+          $json_events[$i] += $startWorking;
+          $endWorking['endWorking'] = $arrWorkingTimes[1];
+          $json_events[$i] += $endWorking;
+
           // check if a users is already participant
           $signed_in = false;
           for ($k = 0; $k < count($arr_result[1]); $k++) {
@@ -91,6 +98,19 @@
 
         echo($result);
       }
+      exit;
+  }
+
+  // save working time of a user for a event
+  if($_POST['req_type'] === "setWorkingTime") {
+      $id = trim($_POST['event_id']);
+      $start = trim($_POST['start']);
+      $end = trim($_POST['end']);
+
+      $db = new Db();
+      $result = $db->insertWorkingTimeForUser($_SESSION['user'], $id, $start, $end);
+
+      echo($result);
       exit;
   }
 
