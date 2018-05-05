@@ -57,6 +57,12 @@ Every normal user can be set to be admin. This can be done by editing the user i
 ### Users
 Normal users can see the events and news. Furthermore they can participate events.
 
+### Timetable
+There is a view for all working hours per user. You have to set the timeFlag in mySQL to access this option. 
+
+![screenshot_20180505_182119](https://user-images.githubusercontent.com/7523395/39665316-3d683b0c-5092-11e8-84a0-8b390823e0ac.png)
+
+
 ## Author
 Christian Högerle
 
