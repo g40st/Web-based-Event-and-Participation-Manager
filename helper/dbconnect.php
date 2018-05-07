@@ -189,7 +189,7 @@ class Db {
         $users = array();
         $tmp_user_id = 0;
 
-        $stmt = $connection->prepare("SELECT users.id, users.Vorname, users.Nachname, users_events.start_workingTime, users_events.end_workingTime FROM users_events INNER JOIN users ON users_events.users_id = users.id");
+        $stmt = $connection->prepare("SELECT users.id, users.Vorname, users.Nachname, users_events.start_workingTime, users_events.end_workingTime FROM users_events INNER JOIN users ON users_events.users_id = users.id ORDER BY users_id");
         $stmt->execute();
         $stmt->bind_result($user_id, $firstname, $lastname, $start_workingTime, $end_workingTime);
 
@@ -216,6 +216,7 @@ class Db {
             }
             $u['time']+= ($time2 - $time1) / 60;
           } else {
+            $tmp_user_id = $user_id;
             array_push($users, $u);
             $u = array();
             $u['id']= $user_id;
