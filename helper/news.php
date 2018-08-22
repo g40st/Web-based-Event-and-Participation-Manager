@@ -16,14 +16,17 @@ function printNews($arr_News, $flagAdmin) {
     } else {
         for ($i = 0; $i < sizeof($arr_News); $i = $i + 4) {
             $stringNews .= '<div class="col-lg-12 ">';
+            $stringNews .= '<div class="panel"><div class="panel-heading"><div class="text-center"><div class="row"><div class="col-sm-9">';
             $text = $arr_News[$i+2];
+
             if($flagAdmin) {
-                $stringNews .= '<p class="lead">' . $arr_News[$i+1] . " [" . date('d-m-Y', strtotime($arr_News[$i+3])) . "]" . ': <button id="newsDea_' . $arr_News[$i] . '" type="button" class="btn btn-warning deakNews">Deaktivieren</button>';
-                $stringNews .= '<br> <br>'. str_replace("\\r\\n","<br />",$text) . '</p>';
+                $stringNews .= '<h3 class="pull-left">' . $arr_News[$i+1] .  ' <button id="newsDea_' . $arr_News[$i] . '" type="button" class="btn btn-warning deakNews">Deaktivieren</button></h3></div><div class="col-sm-3"><h4 class="pull-right">';
             } else {
-                $stringNews .= '<p class="lead">' . $arr_News[$i+1] . " [" . date('d-m-Y', strtotime($arr_News[$i+3])) . "]" . ': <br> '. str_replace("\\r\\n","<br />",$text) . '</p>';
+                $stringNews .= '<h3 class="pull-left">' . $arr_News[$i+1] .  '</h3></div><div class="col-sm-3"><h4 class="pull-right">';
             }
-            $stringNews .= '</div>';
+            $stringNews .= '<small><em>' . date('d-m-Y', strtotime($arr_News[$i+3])) . '</em></small>';
+            $stringNews .= '</h4></div></div></div></div>';
+            $stringNews .= '<div class="panel-body">' . str_replace("\\r\\n","<br />",$text) . '</div></div></div>';
         }
     }
     return $stringNews;
